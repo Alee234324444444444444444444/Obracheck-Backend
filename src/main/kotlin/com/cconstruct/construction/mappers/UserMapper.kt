@@ -1,4 +1,17 @@
 package com.cconstruct.construction.mappers
 
-class UserMapper {
+import com.cconstruct.construction.models.entities.User
+import com.cconstruct.construction.models.responses.UserResponse
+import org.springframework.stereotype.Component
+
+@Component
+class UserMapper : BaseMapper<User, UserResponse> {
+    override fun toResponse(entity: User): UserResponse {
+        return UserResponse(
+            id = entity.id,
+            name = entity.name,
+            email = entity.email
+
+        )
+    }
 }

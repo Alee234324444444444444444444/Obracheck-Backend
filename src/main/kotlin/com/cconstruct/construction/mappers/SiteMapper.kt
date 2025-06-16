@@ -27,7 +27,13 @@ class SiteMapper : BaseMapper<Site, SiteResponse> {
                     description = progress.description,
                     date = progress.date.toString()
                 )
-            }
+            },
+            user = UserResponse(
+                id = entity.user.id,
+                name = entity.user.name,
+                email = entity.user.email
+
+            )
         )
     }
 }
