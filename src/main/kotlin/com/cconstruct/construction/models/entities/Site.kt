@@ -9,13 +9,13 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "sites")
-class Site(
-    val name: String,
-    val address: String,
+data class Site(
+    var name: String,
+    var address: String,
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    val user: User,
+    var user: User,
 
 
     @OneToMany(mappedBy = "site", cascade = [CascadeType.ALL], orphanRemoval = true)

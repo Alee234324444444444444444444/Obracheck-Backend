@@ -9,7 +9,4 @@ data class CreateUserRequest(
     @JsonProperty("email")
     val email: String,
 
-
-    @JsonProperty("password")
-    val password: String
-)
+    )

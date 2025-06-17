@@ -9,14 +9,14 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "workers")
-class Worker(
-    val name: String,
-    val role: String,
+data class Worker(
+    var name: String,
+    var role: String,
     val ci: String,
 
     @ManyToOne
     @JoinColumn(name = "site_id")
-    val site: Site,
+    var site: Site,
 
     @OneToMany(mappedBy = "worker", cascade = [CascadeType.ALL])
     val progresses: List<Progress> = listOf()

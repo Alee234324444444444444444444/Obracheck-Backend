@@ -9,14 +9,14 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "evidences")
-class Evidence(
-    val fileName: String,
+data class Evidence(
+    var fileName: String,
 
     @Lob
     @Column(columnDefinition = "BYTEA")
-    val content: ByteArray,
+    var content: ByteArray,
 
     @ManyToOne
     @JoinColumn(name = "progress_id")
-    val progress: Progress
+    var progress: Progress
 ) : BaseEntity()
