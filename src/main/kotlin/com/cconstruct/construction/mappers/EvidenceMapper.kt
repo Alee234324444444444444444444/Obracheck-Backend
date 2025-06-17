@@ -12,7 +12,7 @@ class EvidenceMapper : BaseMapper<Evidence, EvidenceResponse> {
             id = entity.id,
             fileName = entity.fileName,
             progressId = entity.progress.id,
-            contentBase64 = Base64.getEncoder().encodeToString(entity.content)
+            //contentBase64 = Base64.getEncoder().encodeToString(entity.content)
         )
     }
 }

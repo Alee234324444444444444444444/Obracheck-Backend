@@ -12,9 +12,9 @@ import jakarta.persistence.Table
 data class Evidence(
     var fileName: String,
 
-    @Lob
-    @Column(columnDefinition = "BYTEA")
-    var content: ByteArray,
+   // @Lob
+    //@Column(columnDefinition = "BYTEA")
+    //var content: ByteArray,
 
     @ManyToOne
     @JoinColumn(name = "progress_id")
