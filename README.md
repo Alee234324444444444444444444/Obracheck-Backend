@@ -64,13 +64,29 @@ src/main/kotlin/com/cconstruct/construction/ConstructionApplication.kt
 
 ## Arquitectura del backend
 
-Este backend utiliza una **arquitectura en capas**:
+## Estructura del Proyecto
 
-- `controller`: expone los endpoints
-- `service`: contiene la lógica de negocio
-- `repository`: se comunica con la base de datos
-- `models`: define entidades, requests y responses
-- `exceptions`: manejo centralizado de errores
+El backend sigue una arquitectura por capas con la siguiente estructura de paquetes:
+
+```plaintext
+com/
+└── cconstruct/
+    └── construction/
+        ├── constants/          # Constantes del sistema (rutas, etc.)
+        ├── controllers/        # Controladores REST (manejan los endpoints)
+        ├── exceptions/         # Clases de excepciones personalizadas
+        ├── mappers/            # Conversores entre entidades y DTOs
+        ├── models/             # Modelos del dominio (datos)
+        │   ├── entities/       # Entidades JPA mapeadas a la base de datos
+        │   ├── requests/       # Clases para datos de entrada (POST, PUT)
+        │   └── responses/      # Clases para datos de salida (GET)
+        ├── repositories/       # Interfaces de acceso a base de datos
+        ├── services/           # Lógica de negocio de la aplicación
+        └── ConstructionApplication.kt  # Clase principal de arranque
+
+
+
+
 
 ---
 
