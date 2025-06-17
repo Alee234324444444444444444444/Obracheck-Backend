@@ -79,7 +79,7 @@ El sistema maneja las siguientes tablas principales:
 
 ---
 
-##  ⚙️ Requisitos previos
+##  ⚙️ Cómo ejecutar el proyecto
 
 - 🐳 Tener **Docker Desktop** instalado y en ejecución
 - 🐘 Tener **DBeaver** abierto con una conexión configurada a PostgreSQL
