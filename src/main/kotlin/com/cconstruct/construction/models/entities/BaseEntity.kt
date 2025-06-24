@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 open class BaseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    var id: Long = 0,
 
     @Column(name = "created_at")
     val createdAt: LocalDateTime = LocalDateTime.now(),

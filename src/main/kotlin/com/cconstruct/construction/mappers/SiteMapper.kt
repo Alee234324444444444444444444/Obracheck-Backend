@@ -4,6 +4,8 @@ import com.cconstruct.construction.models.responses.ProgressSummaryResponse
 import com.cconstruct.construction.models.responses.SiteResponse
 import com.cconstruct.construction.models.responses.WorkerSummaryResponse
 import com.cconstruct.construction.models.entities.Site
+import com.cconstruct.construction.models.entities.User
+import com.cconstruct.construction.models.requests.CreateSiteRequest
 import com.cconstruct.construction.models.responses.*
 import org.springframework.stereotype.Component
 
@@ -34,6 +36,14 @@ class SiteMapper : BaseMapper<Site, SiteResponse> {
                 email = entity.user.email
 
             )
+        )
+    }
+
+    fun toEntity(request: CreateSiteRequest, user: User): Site {
+        return Site(
+            name = request.name,
+            address = request.address,
+            user = user
         )
     }
 }

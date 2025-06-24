@@ -1,6 +1,9 @@
 package com.cconstruct.construction.mappers
 
 import com.cconstruct.construction.models.entities.Progress
+import com.cconstruct.construction.models.entities.Site
+import com.cconstruct.construction.models.entities.Worker
+import com.cconstruct.construction.models.requests.CreateProgressRequest
 import com.cconstruct.construction.models.responses.*
 import org.springframework.stereotype.Component
 
@@ -26,6 +29,15 @@ class ProgressMapper : BaseMapper<Progress, ProgressResponse> {
                     fileName = evidence.fileName
                 )
             }
+        )
+    }
+
+    fun toEntity(request: CreateProgressRequest, site: Site, worker: Worker): Progress {
+        return Progress(
+            description = request.description,
+            date = request.date,
+            site = site,
+            worker = worker
         )
     }
 }
