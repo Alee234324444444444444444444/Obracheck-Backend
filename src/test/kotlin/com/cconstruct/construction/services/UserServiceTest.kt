@@ -27,7 +27,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should create a new user`() {
+    fun should_create_a_new_user() {
         val request = CreateUserRequest("Alejandro", "alejandro@puce.edu.ec")
         val user = User(name = request.name, email = request.email).apply { id = 1L }
         val response = UserResponse(1L, "Alejandro", "alejandro@puce.edu.ec")
@@ -43,7 +43,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should throw exception when creating user with existing email`() {
+    fun should_throw_exception_when_creating_user_with_existing_email() {
         val request = CreateUserRequest("Alejandro", "alejandro@puce.edu.ec")
 
         `when`(userRepository.existsByEmail(request.email)).thenReturn(true)
@@ -54,7 +54,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should return all users`() {
+    fun should_return_all_users() {
         val user = User(name = "Alejandro", email = "alejandro@puce.edu.ec").apply { id = 1L }
         val response = UserResponse(1L, "Alejandro", "alejandro@puce.edu.ec")
 
@@ -68,7 +68,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should return user by id`() {
+    fun should_return_user_by_id() {
         val user = User(name = "Alejandro", email = "alejandro@puce.edu.ec").apply { id = 1L }
         val response = UserResponse(1L, "Alejandro", "alejandro@puce.edu.ec")
 
@@ -81,7 +81,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should throw exception when user by id not found`() {
+    fun should_throw_exception_when_user_by_id_not_found() {
         `when`(userRepository.findById(1L)).thenReturn(Optional.empty())
 
         assertThrows<UserNotFoundException> {
@@ -90,7 +90,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should update user when email is changed and not used`() {
+    fun should_update_user_when_email_is_changed_and_not_used() {
         val existingUser = User(name = "Old", email = "old@puce.edu.ec").apply { id = 1L }
         val request = CreateUserRequest("New", "new@puce.edu.ec")
         val updatedUser = User(name = "New", email = "new@puce.edu.ec").apply { id = 1L }
@@ -108,7 +108,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should update user when email is not changed`() {
+    fun should_update_user_when_email_is_not_changed() {
         val existingUser = User(name = "Old", email = "same@puce.edu.ec").apply { id = 1L }
         val request = CreateUserRequest("Updated", "same@puce.edu.ec")
         val updatedUser = User(name = "Updated", email = "same@puce.edu.ec").apply { id = 1L }
@@ -125,7 +125,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should throw exception when updating with existing email`() {
+    fun should_throw_exception_when_updating_with_existing_email() {
         val existingUser = User(name = "Old", email = "old@puce.edu.ec").apply { id = 1L }
         val request = CreateUserRequest("New", "used@puce.edu.ec")
 
@@ -138,7 +138,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should delete user`() {
+    fun should_delete_user() {
         val user = User(name = "Alejandro", email = "alejandro@puce.edu.ec").apply { id = 1L }
 
         `when`(userRepository.findById(1L)).thenReturn(Optional.of(user))
@@ -149,7 +149,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `should throw exception when deleting non-existent user`() {
+    fun should_throw_exception_when_deleting_non_existent_user() {
         `when`(userRepository.findById(1L)).thenReturn(Optional.empty())
 
         assertThrows<UserNotFoundException> {
