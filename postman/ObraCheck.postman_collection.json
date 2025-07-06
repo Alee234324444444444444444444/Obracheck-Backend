@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "78a706aa-762c-4beb-8a0f-ad7918093733",
+		"_postman_id": "e07ed79a-f9b7-4acb-ac06-3e5d429277d2",
 		"name": "ObraCheck",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "42280403"
@@ -616,16 +616,22 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"file_name\": \"avance.jpg\",\r\n  \"progress_id\": 2\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Alee/Downloads/casco.jpg"
+						},
+						{
+							"key": "progressId",
+							"value": "2",
+							"type": "text"
 						}
-					}
+					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/evidences",
+					"raw": "http://localhost:8080/api/evidences/upload",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -633,7 +639,8 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"evidences"
+						"evidences",
+						"upload"
 					]
 				}
 			},
@@ -648,13 +655,14 @@
 				"method": "PUT",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"file_name\": \"ava.jpg\",\r\n  \"progress_id\": 2\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Alee/Downloads/PALA.jpg"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/evidences/1",

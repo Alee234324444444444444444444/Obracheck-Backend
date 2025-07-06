@@ -1,5 +1,6 @@
 package com.cconstruct.construction.exceptions.handlers
 
+import com.cconstruct.construction.exceptions.EvidenceAlreadyExistsException
 import com.cconstruct.construction.exceptions.EvidenceNotFoundException
 import com.cconstruct.construction.exceptions.ProgressNotFoundException
 import com.cconstruct.construction.exceptions.SiteAlreadyExistsException
@@ -47,4 +48,13 @@ class GlobalExceptionHandler {
     @ExceptionHandler(WorkerAlreadyExistsException::class)
     fun handleWorkerExists(ex: WorkerAlreadyExistsException): ResponseEntity<Map<String, String>> =
         ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.CONFLICT)
+
+    @ExceptionHandler(EvidenceAlreadyExistsException::class)
+    fun handleEvidenceExists(ex: EvidenceAlreadyExistsException): ResponseEntity<Map<String, String>> =
+        ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.CONFLICT)
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgument(ex: IllegalArgumentException): ResponseEntity<Map<String, String>> =
+        ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.BAD_REQUEST)
+
 }

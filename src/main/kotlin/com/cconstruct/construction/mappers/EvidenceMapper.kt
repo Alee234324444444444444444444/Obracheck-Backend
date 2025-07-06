@@ -1,27 +1,34 @@
 package com.cconstruct.construction.mappers
 
+import com.cconstruct.construction.models.dtos.EvidenceDto
 import com.cconstruct.construction.models.entities.Evidence
-import com.cconstruct.construction.models.entities.Progress
-import com.cconstruct.construction.models.requests.UploadEvidenceRequest
-import com.cconstruct.construction.models.responses.*
+import com.cconstruct.construction.models.responses.EvidenceResponse
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class EvidenceMapper : BaseMapper<Evidence, EvidenceResponse> {
+
+    // Para CRUD normal
     override fun toResponse(entity: Evidence): EvidenceResponse {
         return EvidenceResponse(
             id = entity.id,
             fileName = entity.fileName,
-            progressId = entity.progress.id,
-            //contentBase64 = Base64.getEncoder().encodeToString(entity.content)
+            progressId = entity.progress.id
         )
     }
 
-    fun toEntity(request: UploadEvidenceRequest, progress: Progress): Evidence {
-        return Evidence(
-            fileName = request.fileName,
-            progress = progress
+    // Para endpoints de imágenes
+    fun toDto(entity: Evidence): EvidenceDto {
+        return EvidenceDto(
+            id = entity.id,
+            fileName = entity.fileName,
+            originalFileName = entity.originalFileName,
+            contentType = entity.contentType,
+            fileSize = entity.fileSize,
+            uploadDate = entity.uploadDate
         )
     }
+
+    fun toDtoList(entities: List<Evidence>): List<EvidenceDto> = entities.map { toDto(it) }
+
 }

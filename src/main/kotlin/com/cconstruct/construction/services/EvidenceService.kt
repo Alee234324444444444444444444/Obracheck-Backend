@@ -1,14 +1,18 @@
 package com.cconstruct.construction.services
 
+import com.cconstruct.construction.exceptions.EvidenceAlreadyExistsException
 import com.cconstruct.construction.exceptions.EvidenceNotFoundException
 import com.cconstruct.construction.exceptions.ProgressNotFoundException
 import com.cconstruct.construction.mappers.EvidenceMapper
 import com.cconstruct.construction.models.entities.Evidence
-import com.cconstruct.construction.models.requests.UploadEvidenceRequest
+import com.cconstruct.construction.models.responses.EvidenceListResponse
 import com.cconstruct.construction.models.responses.EvidenceResponse
+import com.cconstruct.construction.models.responses.EvidenceUploadResponse
 import com.cconstruct.construction.repositories.EvidenceRepository
 import com.cconstruct.construction.repositories.ProgressRepository
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDateTime
 
 @Service
 class EvidenceService(
@@ -17,29 +21,74 @@ class EvidenceService(
     private val evidenceMapper: EvidenceMapper
 ) {
 
-    fun createEvidence(request: UploadEvidenceRequest): EvidenceResponse {
-        val progress = progressRepository.findById(request.progressId)
-            .orElseThrow { ProgressNotFoundException("Progress with ID ${request.progressId} not found.") }
+    fun uploadEvidence(file: MultipartFile, progressId: Long): EvidenceUploadResponse {
+        if (file.isEmpty) {
+            throw IllegalArgumentException("The uploaded file is empty.")
+        }
+
+        val contentType = file.contentType
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw IllegalArgumentException("Only image files are allowed.")
+        }
+
+        val originalName = file.originalFilename ?: "unnamed.jpg"
+
+        if (evidenceRepository.existsByFileName(originalName)) {
+            throw EvidenceAlreadyExistsException("An evidence with the name \"$originalName\" already exists.")
+        }
+
+        val progress = progressRepository.findById(progressId)
+            .orElseThrow { ProgressNotFoundException("Progress with ID $progressId not found.") }
 
         val evidence = Evidence(
-            fileName = request.fileName,
+            fileName = originalName,
+            originalFileName = originalName,
+            contentType = contentType,
+            fileSize = file.size,
+            content = file.bytes,
             progress = progress
         )
 
-        return evidenceMapper.toResponse(evidenceRepository.save(evidence))
+        val saved = evidenceRepository.save(evidence)
+
+        return EvidenceUploadResponse(
+            message = "Image uploaded successfully.",
+            image = evidenceMapper.toDto(saved)
+        )
     }
 
-    fun updateEvidence(id: Long, request: UploadEvidenceRequest): EvidenceResponse {
+    fun updateEvidence(id: Long, file: MultipartFile): EvidenceUploadResponse {
+        if (file.isEmpty) {
+            throw IllegalArgumentException("The uploaded file is empty.")
+        }
+
+        val contentType = file.contentType
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw IllegalArgumentException("Only image files are allowed.")
+        }
+
+        val originalName = file.originalFilename ?: "unnamed.jpg"
+
         val evidence = evidenceRepository.findById(id)
             .orElseThrow { EvidenceNotFoundException("Evidence with ID $id not found.") }
 
-        val progress = progressRepository.findById(request.progressId)
-            .orElseThrow { ProgressNotFoundException("Progress with ID ${request.progressId} not found.") }
+        if (evidenceRepository.existsByFileName(originalName) && evidence.fileName != originalName) {
+            throw EvidenceAlreadyExistsException("An evidence with the name \"$originalName\" already exists.")
+        }
 
-        evidence.fileName = request.fileName
-        evidence.progress = progress
+        evidence.fileName = originalName
+        evidence.originalFileName = originalName
+        evidence.contentType = contentType
+        evidence.fileSize = file.size
+        evidence.content = file.bytes
+        evidence.uploadDate = LocalDateTime.now()
 
-        return evidenceMapper.toResponse(evidenceRepository.save(evidence))
+        val updated = evidenceRepository.save(evidence)
+
+        return EvidenceUploadResponse(
+            message = "Image updated successfully.",
+            image = evidenceMapper.toDto(updated)
+        )
     }
 
     fun getEvidenceById(id: Long): EvidenceResponse {
@@ -49,8 +98,20 @@ class EvidenceService(
         return evidenceMapper.toResponse(evidence)
     }
 
-    fun listEvidences(): List<EvidenceResponse> =
-        evidenceMapper.toResponseList(evidenceRepository.findAll())
+    fun downloadEvidence(id: Long): Pair<Evidence, ByteArray> {
+        val evidence = evidenceRepository.findById(id)
+            .orElseThrow { EvidenceNotFoundException("Evidence with ID $id not found.") }
+
+        return Pair(evidence, evidence.content)
+    }
+
+    fun listEvidences(): EvidenceListResponse {
+        val evidences = evidenceRepository.findAll()
+        return EvidenceListResponse(
+            images = evidenceMapper.toDtoList(evidences),
+            total = evidences.size.toLong()
+        )
+    }
 
     fun deleteEvidence(id: Long) {
         val evidence = evidenceRepository.findById(id)
