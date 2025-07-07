@@ -4,6 +4,7 @@ import com.cconstruct.construction.constants.Routes
 import com.cconstruct.construction.models.requests.CreateWorkerRequest
 import com.cconstruct.construction.models.responses.WorkerResponse
 import com.cconstruct.construction.services.WorkerService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -29,6 +30,9 @@ class WorkerController(
         workerService.updateWorker(id, request)
 
     @DeleteMapping("/{id}")
-    fun deleteWorker(@PathVariable id: Long) =
+    fun deleteWorker(@PathVariable id: Long): ResponseEntity<Void> {
         workerService.deleteWorker(id)
+        return ResponseEntity.noContent().build()
+    }
+
 }

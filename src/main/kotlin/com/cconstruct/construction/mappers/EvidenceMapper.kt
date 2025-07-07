@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component
 @Component
 class EvidenceMapper : BaseMapper<Evidence, EvidenceResponse> {
 
-    // Para CRUD normal
     override fun toResponse(entity: Evidence): EvidenceResponse {
         return EvidenceResponse(
             id = entity.id,
@@ -17,7 +16,7 @@ class EvidenceMapper : BaseMapper<Evidence, EvidenceResponse> {
         )
     }
 
-    // Para endpoints de imágenes
+
     fun toDto(entity: Evidence): EvidenceDto {
         return EvidenceDto(
             id = entity.id,

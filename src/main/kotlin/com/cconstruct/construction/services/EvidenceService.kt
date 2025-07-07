@@ -22,15 +22,7 @@ class EvidenceService(
 ) {
 
     fun uploadEvidence(file: MultipartFile, progressId: Long): EvidenceUploadResponse {
-        if (file.isEmpty) {
-            throw IllegalArgumentException("The uploaded file is empty.")
-        }
-
-        val contentType = file.contentType
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw IllegalArgumentException("Only image files are allowed.")
-        }
-
+        val contentType = file.contentType ?: "application/octet-stream"
         val originalName = file.originalFilename ?: "unnamed.jpg"
 
         if (evidenceRepository.existsByFileName(originalName)) {
@@ -58,15 +50,7 @@ class EvidenceService(
     }
 
     fun updateEvidence(id: Long, file: MultipartFile): EvidenceUploadResponse {
-        if (file.isEmpty) {
-            throw IllegalArgumentException("The uploaded file is empty.")
-        }
-
-        val contentType = file.contentType
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw IllegalArgumentException("Only image files are allowed.")
-        }
-
+        val contentType = file.contentType ?: "application/octet-stream"
         val originalName = file.originalFilename ?: "unnamed.jpg"
 
         val evidence = evidenceRepository.findById(id)

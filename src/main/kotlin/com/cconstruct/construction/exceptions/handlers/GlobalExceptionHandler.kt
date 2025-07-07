@@ -53,8 +53,6 @@ class GlobalExceptionHandler {
     fun handleEvidenceExists(ex: EvidenceAlreadyExistsException): ResponseEntity<Map<String, String>> =
         ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.CONFLICT)
 
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun handleIllegalArgument(ex: IllegalArgumentException): ResponseEntity<Map<String, String>> =
-        ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.BAD_REQUEST)
+
 
 }

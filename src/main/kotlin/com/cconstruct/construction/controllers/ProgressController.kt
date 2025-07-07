@@ -4,6 +4,7 @@ import com.cconstruct.construction.constants.Routes
 import com.cconstruct.construction.models.requests.CreateProgressRequest
 import com.cconstruct.construction.models.responses.ProgressResponse
 import com.cconstruct.construction.services.ProgressService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -28,7 +29,11 @@ class ProgressController(
     fun listProgresses(): List<ProgressResponse> =
         progressService.listProgresses()
 
+
     @DeleteMapping("/{id}")
-    fun deleteProgress(@PathVariable id: Long) =
+    fun deleteProgress(@PathVariable id: Long): ResponseEntity<Void> {
         progressService.deleteProgress(id)
+        return ResponseEntity.noContent().build()
+    }
+
 }

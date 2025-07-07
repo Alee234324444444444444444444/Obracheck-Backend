@@ -7,5 +7,4 @@ data class SiteResponse(
     val workers: List<WorkerSummaryResponse>,
     val progresses: List<ProgressSummaryResponse>,
     val user: UserResponse
-
 )
