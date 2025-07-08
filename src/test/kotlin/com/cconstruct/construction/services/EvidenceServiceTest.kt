@@ -365,7 +365,7 @@ class EvidenceServiceTest {
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
-        `when`(file.originalFilename).thenReturn(null) // 👈 rama faltante
+        `when`(file.originalFilename).thenReturn(null)
         `when`(file.size).thenReturn(1024)
         `when`(file.bytes).thenReturn(ByteArray(1024))
 
@@ -538,13 +538,4 @@ class EvidenceServiceTest {
 
         verify(evidenceRepository).save(any(Evidence::class.java))
     }
-
-
-
-
-
-
-
-
-
 }

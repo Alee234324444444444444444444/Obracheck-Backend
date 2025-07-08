@@ -17,7 +17,9 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
@@ -198,7 +200,7 @@ class EvidenceControllerTest {
             .file(file)
             .param("progressId", "1")
             .contentType(MediaType.MULTIPART_FORM_DATA))
-            .andExpect(status().isConflict()) // HTTP 409
+            .andExpect(status().isConflict())
             .andReturn()
 
         assertEquals(409, result.response.status)

@@ -152,7 +152,7 @@ class UserControllerTest {
             contentType = MediaType.APPLICATION_JSON
             content = json
         }.andExpect {
-            status { isConflict() } // 409
+            status { isConflict() }
         }.andReturn()
 
         assertEquals(409, result.response.status)
