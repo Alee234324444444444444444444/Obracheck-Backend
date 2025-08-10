@@ -1,5 +1,7 @@
 package com.cconstruct.construction.exceptions.handlers
 
+import com.cconstruct.construction.exceptions.AttendanceAlreadyExistsException
+import com.cconstruct.construction.exceptions.AttendanceNotFoundException
 import com.cconstruct.construction.exceptions.EvidenceAlreadyExistsException
 import com.cconstruct.construction.exceptions.EvidenceNotFoundException
 import com.cconstruct.construction.exceptions.ProgressNotFoundException
@@ -53,6 +55,13 @@ class GlobalExceptionHandler {
     fun handleEvidenceExists(ex: EvidenceAlreadyExistsException): ResponseEntity<Map<String, String>> =
         ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.CONFLICT)
 
+    @ExceptionHandler(AttendanceAlreadyExistsException::class)
+    fun handleAttendanceExists(ex: AttendanceAlreadyExistsException): ResponseEntity<Map<String, String>> =
+        ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.CONFLICT)
 
+
+    @ExceptionHandler(AttendanceNotFoundException::class)
+    fun handleAttendanceNotFound(ex: AttendanceNotFoundException): ResponseEntity<Map<String, String>> =
+        ResponseEntity(mapOf("error" to ex.message.orEmpty()), HttpStatus.NOT_FOUND)
 
 }

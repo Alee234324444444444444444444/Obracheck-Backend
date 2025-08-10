@@ -9,5 +9,6 @@ class Routes {
         const val WORKERS = "$BASE_PATH/workers"
         const val PROGRESSES = "$BASE_PATH/progresses"
         const val EVIDENCES = "$BASE_PATH/evidences"
+        const val ATTENDANCES = "$BASE_PATH/attendances"
     }
 }
