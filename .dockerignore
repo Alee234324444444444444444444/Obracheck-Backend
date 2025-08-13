@@ -1,0 +1,28 @@
+# Salidas de compilación
+build/
+.gradle/
+out/
+
+# Configuración del IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# Archivos de documentación
+README.md
+*.md
+
+# Otros
+test-output/
