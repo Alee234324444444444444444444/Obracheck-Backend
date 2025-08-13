@@ -20,7 +20,7 @@ class AttendanceService(
     private val siteRepository: SiteRepository,
     private val attendanceMapper: AttendanceMapper
 ) {
-    /** Listar asistencia del día por sitio (para la pantalla) */
+
     fun listBySiteAndDate(siteId: Long, date: LocalDate): AttendanceListResponse {
         val site = siteRepository.findById(siteId)
             .orElseThrow { SiteNotFoundException("Site with ID $siteId not found.") }
@@ -37,7 +37,7 @@ class AttendanceService(
         )
     }
 
-    /** Registrar/actualizar la lista completa para un sitio y fecha (bulk) */
+
     fun upsertBulkAttendance(request: AttendanceBulkUpsertRequest): List<AttendanceResponse> {
         val date = request.date ?: LocalDate.now()
         val site = siteRepository.findById(request.siteId)
@@ -47,7 +47,7 @@ class AttendanceService(
             val worker = workerRepository.findById(item.workerId)
                 .orElseThrow { WorkerNotFoundException("Worker with ID ${item.workerId} not found.") }
 
-            // Un registro por worker+date. Si existe, actualiza site/status; si no, crea.
+
             val attendance: Attendance = attendanceRepository
                 .findByWorkerIdAndDate(worker.id, date)
                 ?.apply {

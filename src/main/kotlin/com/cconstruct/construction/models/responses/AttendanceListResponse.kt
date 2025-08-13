@@ -1,6 +1,5 @@
 package com.cconstruct.construction.models.responses
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
 data class AttendanceListResponse(
