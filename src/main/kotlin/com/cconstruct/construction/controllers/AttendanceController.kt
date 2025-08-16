@@ -15,7 +15,7 @@ import java.time.LocalDate
 class AttendanceController(
     private val attendanceService: AttendanceService
 ) {
-    /** Listar asistencia por sitio y fecha */
+
     @GetMapping("/site/{siteId}/date/{date}")
     fun listBySiteAndDate(
         @PathVariable siteId: Long,
@@ -23,7 +23,7 @@ class AttendanceController(
     ): AttendanceListResponse =
         attendanceService.listBySiteAndDate(siteId, date)
 
-    /** Registrar/actualizar asistencia en bloque */
+
     @PostMapping("/bulk")
     fun upsertBulkAttendance(
         @RequestBody request: AttendanceBulkUpsertRequest

@@ -58,7 +58,7 @@ class EvidenceControllerTest {
     @Test
     fun should_upload_evidence() {
         val now = LocalDateTime.now()
-        val file = MockMultipartFile("file", "photo.jpg", "image/jpeg", byteArrayOf(1, 2, 3))
+        val file = MockMultipartFile("file_name", "photo.jpg", "image/jpeg", byteArrayOf(1, 2, 3))
         val dto = EvidenceDto(1L, "photo.jpg", "photo.jpg", "image/jpeg", 3, now)
         val response = EvidenceUploadResponse("Image uploaded successfully.", dto)
 
@@ -66,11 +66,11 @@ class EvidenceControllerTest {
 
         val result = mockMvc.perform(multipart("$BASE_URL/upload")
             .file(file)
-            .param("progressId", "1")
+            .param("progress_id", "1")
             .contentType(MediaType.MULTIPART_FORM_DATA))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("Image uploaded successfully."))
-            .andExpect(jsonPath("$.image.fileName").value("photo.jpg"))
+            .andExpect(jsonPath("$.image.file_name").value("photo.jpg"))
             .andReturn()
 
         assertEquals(200, result.response.status)
@@ -78,14 +78,14 @@ class EvidenceControllerTest {
 
     @Test
     fun should_return_404_when_progress_not_found_on_upload() {
-        val file = MockMultipartFile("file", "photo.jpg", "image/jpeg", byteArrayOf(1, 2, 3))
+        val file = MockMultipartFile("file_name", "photo.jpg", "image/jpeg", byteArrayOf(1, 2, 3))
 
         `when`(evidenceService.uploadEvidence(file, 99L))
             .thenThrow(ProgressNotFoundException("Progress not found"))
 
         val result = mockMvc.perform(multipart("$BASE_URL/upload")
             .file(file)
-            .param("progressId", "99")
+            .param("progress_id", "99")
             .contentType(MediaType.MULTIPART_FORM_DATA))
             .andExpect(status().isNotFound())
             .andReturn()
@@ -96,7 +96,7 @@ class EvidenceControllerTest {
     @Test
     fun should_update_evidence() {
         val now = LocalDateTime.now()
-        val file = MockMultipartFile("file", "updated.jpg", "image/jpeg", byteArrayOf(10, 20))
+        val file = MockMultipartFile("file_name", "updated.jpg", "image/jpeg", byteArrayOf(10, 20))
         val dto = EvidenceDto(1L, "updated.jpg", "updated.jpg", "image/jpeg", 2, now)
         val response = EvidenceUploadResponse("Image updated successfully.", dto)
 
@@ -115,7 +115,7 @@ class EvidenceControllerTest {
 
     @Test
     fun should_return_404_when_evidence_not_found_on_update() {
-        val file = MockMultipartFile("file", "updated.jpg", "image/jpeg", byteArrayOf(1))
+        val file = MockMultipartFile("file_name", "updated.jpg", "image/jpeg", byteArrayOf(1))
 
         `when`(evidenceService.updateEvidence(999L, file))
             .thenThrow(EvidenceNotFoundException("Not found"))
@@ -144,7 +144,7 @@ class EvidenceControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.total").value(1))
-            .andExpect(jsonPath("$.images[0].fileName").value("a.jpg"))
+            .andExpect(jsonPath("$.images[0].file_name").value("a.jpg"))
             .andReturn()
 
         assertEquals(200, result.response.status)
@@ -159,7 +159,7 @@ class EvidenceControllerTest {
         val result = mockMvc.perform(get("$BASE_URL/1")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.fileName").value("foto.jpg"))
+            .andExpect(jsonPath("$.file_name").value("foto.jpg"))
             .andReturn()
 
         assertEquals(200, result.response.status)
@@ -191,14 +191,14 @@ class EvidenceControllerTest {
 
     @Test
     fun should_return_409_when_evidence_already_exists_on_upload() {
-        val file = MockMultipartFile("file", "duplicada.jpg", "image/jpeg", byteArrayOf(1, 2, 3))
+        val file = MockMultipartFile("file_name", "duplicada.jpg", "image/jpeg", byteArrayOf(1, 2, 3))
 
         `when`(evidenceService.uploadEvidence(file, 1L))
             .thenThrow(EvidenceAlreadyExistsException("An evidence with the name already exists."))
 
         val result = mockMvc.perform(multipart("$BASE_URL/upload")
             .file(file)
-            .param("progressId", "1")
+            .param("progress_id", "1")
             .contentType(MediaType.MULTIPART_FORM_DATA))
             .andExpect(status().isConflict())
             .andReturn()

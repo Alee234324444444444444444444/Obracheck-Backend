@@ -19,8 +19,8 @@ class EvidenceController(
 
     @PostMapping("/upload")
     fun uploadEvidence(
-        @RequestParam("file") file: MultipartFile,
-        @RequestParam("progressId") progressId: Long
+        @RequestParam("file_name") file: MultipartFile,
+        @RequestParam("progress_id") progressId: Long
     ): ResponseEntity<EvidenceUploadResponse> {
         val response = evidenceService.uploadEvidence(file, progressId)
         return ResponseEntity.ok(response)
@@ -29,7 +29,7 @@ class EvidenceController(
     @PutMapping("/{id}")
     fun updateEvidence(
         @PathVariable id: Long,
-        @RequestParam("file") file: MultipartFile
+        @RequestParam("file_name") file: MultipartFile
     ): ResponseEntity<EvidenceUploadResponse> {
         val response = evidenceService.updateEvidence(id, file)
         return ResponseEntity.ok(response)

@@ -47,6 +47,7 @@ class AttendanceControllerTest {
         objectMapper = ObjectMapper()
             .registerModule(JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
     }
 
     @Test
@@ -87,14 +88,16 @@ class AttendanceControllerTest {
             .andExpect {
                 status { isOk() }
 
-                jsonPath("$.siteId") { value(1) }
-                jsonPath("$.siteName") { value("Obra Norte") }
+                jsonPath("$.site_id") { value(1) }
+                jsonPath("$.site_name") { value("Obra Norte") }
                 jsonPath("$.date") { value(date.toString()) }
-                jsonPath("$.items[0].workerId") { value(101) }
-                jsonPath("$.items[0].workerName") { value("Luis") }
-                jsonPath("$.items[0].siteId") { value(1) }
-                jsonPath("$.items[0].siteName") { value("Obra Norte") }
+
+                jsonPath("$.items[0].worker_id") { value(101) }
+                jsonPath("$.items[0].worker_name") { value("Luis") }
+                jsonPath("$.items[0].site_id") { value(1) }
+                jsonPath("$.items[0].site_name") { value("Obra Norte") }
                 jsonPath("$.items[0].status") { value("PRESENT") }
+
                 jsonPath("$.items[1].status") { value("ABSENT") }
             }.andReturn()
 
@@ -142,10 +145,10 @@ class AttendanceControllerTest {
             content = json
         }.andExpect {
             status { isOk() }
-            jsonPath("$[0].workerId") { value(101) }
-            jsonPath("$[0].workerName") { value("Luis") }
-            jsonPath("$[0].siteId") { value(1) }
-            jsonPath("$[0].siteName") { value("Obra Norte") }
+            jsonPath("$[0].worker_id") { value(101) }
+            jsonPath("$[0].worker_name") { value("Luis") }
+            jsonPath("$[0].site_id") { value(1) }
+            jsonPath("$[0].site_name") { value("Obra Norte") }
             jsonPath("$[0].status") { value("PRESENT") }
             jsonPath("$[1].status") { value("LATE") }
         }.andReturn()
