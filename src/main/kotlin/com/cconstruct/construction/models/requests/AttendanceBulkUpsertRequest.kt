@@ -14,6 +14,7 @@ data class AttendanceBulkUpsertRequest(
 
     val items: List<Item>
 ) {
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     data class Item(
         val workerId: Long,
         val status: AttendanceStatus

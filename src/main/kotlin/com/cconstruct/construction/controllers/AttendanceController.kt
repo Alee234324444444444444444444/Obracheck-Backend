@@ -16,9 +16,9 @@ class AttendanceController(
     private val attendanceService: AttendanceService
 ) {
 
-    @GetMapping("/site/{siteId}/date/{date}")
+    @GetMapping("/site/{site_id}/date/{date}")
     fun listBySiteAndDate(
-        @PathVariable siteId: Long,
+        @PathVariable("site_id")siteId: Long,
         @PathVariable @DateTimeFormat(iso = ISO.DATE) date: LocalDate
     ): AttendanceListResponse =
         attendanceService.listBySiteAndDate(siteId, date)
