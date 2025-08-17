@@ -1,7 +1,9 @@
 package com.cconstruct.construction.models.entities
 
+import jakarta.persistence.Basic
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.Lob
 import jakarta.persistence.ManyToOne
@@ -23,12 +25,12 @@ data class Evidence(
     @Column(name = "file_size", nullable = false)
     var fileSize: Long,
 
-    @Lob
-    @Column(name = "content", nullable = false)
+
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "content", nullable = false, columnDefinition = "BYTEA") // <- fuerza BYTEA
     var content: ByteArray,
 
-    @ManyToOne
-    @JoinColumn(name = "progress_id")
+    @ManyToOne @JoinColumn(name = "progress_id")
     var progress: Progress,
 
     @Column(name = "upload_date", nullable = false)

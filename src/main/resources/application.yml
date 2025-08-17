@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: construction
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB      # límite por archivo (ajusta si quieres)
+      max-request-size: 50MB
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:6969/constructionsdb}

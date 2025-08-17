@@ -24,7 +24,8 @@ class EvidenceMapper : BaseMapper<Evidence, EvidenceResponse> {
             originalFileName = entity.originalFileName,
             contentType = entity.contentType,
             fileSize = entity.fileSize,
-            uploadDate = entity.uploadDate
+            uploadDate = entity.uploadDate,
+            progressId = entity.progress.id
         )
     }
 

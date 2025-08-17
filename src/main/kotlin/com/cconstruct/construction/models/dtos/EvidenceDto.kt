@@ -11,5 +11,6 @@ data class EvidenceDto(
     val originalFileName: String,
     val contentType: String,
     val fileSize: Long,
-    val uploadDate: LocalDateTime
+    val uploadDate: LocalDateTime,
+    val progressId: Long
 )

@@ -19,7 +19,6 @@ import org.mockito.Mockito.*
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 
-
 class EvidenceServiceTest {
 
     private lateinit var evidenceRepository: EvidenceRepository
@@ -41,7 +40,15 @@ class EvidenceServiceTest {
     fun should_upload_evidence_successfully() {
         val progress = Progress("Progreso", LocalDateTime.now(), mock(), mock()).apply { id = 1L }
         val evidence = Evidence("img.jpg", "img.jpg", "image/jpeg", 1000, ByteArray(10), progress)
-        val dto = EvidenceDto(1L, "img.jpg", "img.jpg", "image/jpeg", 1000, evidence.uploadDate)
+        val dto = EvidenceDto(
+            id = 1L,
+            fileName = "img.jpg",
+            originalFileName = "img.jpg",
+            contentType = "image/jpeg",
+            fileSize = 1000,
+            uploadDate = evidence.uploadDate,
+            progressId = 1L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -58,7 +65,6 @@ class EvidenceServiceTest {
         assertEquals("Image uploaded successfully.", result.message)
         assertEquals("img.jpg", result.image?.fileName)
     }
-
 
     @Test
     fun should_throw_exception_when_file_name_exists() {
@@ -115,9 +121,17 @@ class EvidenceServiceTest {
 
     @Test
     fun should_list_all_evidences() {
-        val progress = Progress("Desc", LocalDateTime.now(), mock(), mock())
+        val progress = Progress("Desc", LocalDateTime.now(), mock(), mock()).apply { id = 1L }
         val evidence = Evidence("x.jpg", "x.jpg", "image/jpeg", 1000, ByteArray(10), progress).apply { id = 1L }
-        val dto = EvidenceDto(1L, "x.jpg", "x.jpg", "image/jpeg", 1000, evidence.uploadDate)
+        val dto = EvidenceDto(
+            id = 1L,
+            fileName = "x.jpg",
+            originalFileName = "x.jpg",
+            contentType = "image/jpeg",
+            fileSize = 1000,
+            uploadDate = evidence.uploadDate,
+            progressId = 1L
+        )
 
         `when`(evidenceRepository.findAll()).thenReturn(listOf(evidence))
         `when`(evidenceMapper.toDtoList(listOf(evidence))).thenReturn(listOf(dto))
@@ -183,7 +197,15 @@ class EvidenceServiceTest {
             fileSize = 1000,
             content = ByteArray(10)
         )
-        val dto = EvidenceDto(2L, "new.jpg", "new.jpg", "image/png", 1000, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 2L,
+            fileName = "new.jpg",
+            originalFileName = "new.jpg",
+            contentType = "image/png",
+            fileSize = 1000,
+            uploadDate = LocalDateTime.now(),
+            progressId = 1L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/png")
@@ -220,7 +242,15 @@ class EvidenceServiceTest {
         val progress = Progress("Desc", LocalDateTime.now(), mock(), mock()).apply { id = 1L }
         val evidence = Evidence("same.jpg", "same.jpg", "image/jpeg", 500, ByteArray(5), progress).apply { id = 2L }
         val updated = evidence.copy(fileSize = 800, content = ByteArray(8))
-        val dto = EvidenceDto(2L, "same.jpg", "same.jpg", "image/jpeg", 800, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 2L,
+            fileName = "same.jpg",
+            originalFileName = "same.jpg",
+            contentType = "image/jpeg",
+            fileSize = 800,
+            uploadDate = LocalDateTime.now(),
+            progressId = 1L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -239,12 +269,10 @@ class EvidenceServiceTest {
         assertEquals("same.jpg", result.image?.fileName)
     }
 
-
     @Test
     fun should_throw_exception_when_updating_with_existing_different_file_name() {
         val progress = Progress("Test", LocalDateTime.now(), mock(), mock()).apply { id = 1L }
-        val existingEvidence =
-            Evidence("old.jpg", "old.jpg", "image/jpeg", 500, ByteArray(5), progress).apply { id = 2L }
+        val existingEvidence = Evidence("old.jpg", "old.jpg", "image/jpeg", 500, ByteArray(5), progress).apply { id = 2L }
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -266,7 +294,15 @@ class EvidenceServiceTest {
     fun should_update_evidence_with_valid_image_type() {
         val progress = Progress("Valid", LocalDateTime.now(), mock(), mock()).apply { id = 1L }
         val evidence = Evidence("valid.jpg", "valid.jpg", "image/jpeg", 500, ByteArray(5), progress).apply { id = 2L }
-        val dto = EvidenceDto(2L, "valid.jpg", "valid.jpg", "image/jpeg", 1200, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 2L,
+            fileName = "valid.jpg",
+            originalFileName = "valid.jpg",
+            contentType = "image/jpeg",
+            fileSize = 1200,
+            uploadDate = LocalDateTime.now(),
+            progressId = 1L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -285,7 +321,6 @@ class EvidenceServiceTest {
         assertEquals("valid.jpg", result.image?.fileName)
     }
 
-
     @Test
     fun should_upload_image_when_content_type_is_valid() {
         val progress = Progress("Subida", LocalDateTime.now(), mock(), mock()).apply { id = 3L }
@@ -300,7 +335,15 @@ class EvidenceServiceTest {
         `when`(progressRepository.findById(3L)).thenReturn(Optional.of(progress))
         `when`(evidenceRepository.save(any(Evidence::class.java))).thenReturn(evidence)
         `when`(evidenceMapper.toDto(evidence)).thenReturn(
-            EvidenceDto(3L, "foto.jpg", "foto.jpg", "image/jpeg", 2048, LocalDateTime.now())
+            EvidenceDto(
+                id = 3L,
+                fileName = "foto.jpg",
+                originalFileName = "foto.jpg",
+                contentType = "image/jpeg",
+                fileSize = 2048,
+                uploadDate = LocalDateTime.now(),
+                progressId = 3L
+            )
         )
 
         val result = evidenceService.uploadEvidence(file, 3L)
@@ -309,12 +352,19 @@ class EvidenceServiceTest {
         assertEquals("foto.jpg", result.image?.fileName)
     }
 
-
     @Test
     fun should_upload_evidence_with_valid_content_type() {
         val progress = Progress("Subida", LocalDateTime.now(), mock(), mock()).apply { id = 10L }
         val evidence = Evidence("foto.jpg", "foto.jpg", "image/jpeg", 2048, ByteArray(2048), progress)
-        val dto = EvidenceDto(10L, "foto.jpg", "foto.jpg", "image/jpeg", 2048, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 10L,
+            fileName = "foto.jpg",
+            originalFileName = "foto.jpg",
+            contentType = "image/jpeg",
+            fileSize = 2048,
+            uploadDate = LocalDateTime.now(),
+            progressId = 10L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -333,12 +383,19 @@ class EvidenceServiceTest {
         assertEquals("foto.jpg", result.image?.fileName)
     }
 
-
     @Test
     fun should_use_default_name_if_original_filename_is_null() {
-        val progress = Progress("Test", LocalDateTime.now(), mock(), mock()).apply { id = 11L }
+        val progress = Progress("Test", LocalDateTime.now(), mock(), mock()).apply { id = 1L }
         val evidence = Evidence("unnamed.jpg", "unnamed.jpg", "image/jpeg", 1024, ByteArray(1024), progress)
-        val dto = EvidenceDto(11L, "unnamed.jpg", "unnamed.jpg", "image/jpeg", 1024, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 11L,
+            fileName = "unnamed.jpg",
+            originalFileName = "unnamed.jpg",
+            contentType = "image/jpeg",
+            fileSize = 1024,
+            uploadDate = LocalDateTime.now(),
+            progressId = 1L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -347,11 +404,11 @@ class EvidenceServiceTest {
         `when`(file.bytes).thenReturn(ByteArray(1024))
 
         `when`(evidenceRepository.existsByFileName("unnamed.jpg")).thenReturn(false)
-        `when`(progressRepository.findById(11L)).thenReturn(Optional.of(progress))
+        `when`(progressRepository.findById(1L)).thenReturn(Optional.of(progress))
         `when`(evidenceRepository.save(any())).thenReturn(evidence)
         `when`(evidenceMapper.toDto(evidence)).thenReturn(dto)
 
-        val result = evidenceService.uploadEvidence(file, 11L)
+        val result = evidenceService.uploadEvidence(file, 1L)
 
         assertEquals("Image uploaded successfully.", result.message)
         assertEquals("unnamed.jpg", result.image?.fileName)
@@ -361,7 +418,15 @@ class EvidenceServiceTest {
     fun should_use_default_name_when_updating_if_original_filename_is_null() {
         val progress = Progress("Modificación", LocalDateTime.now(), mock(), mock()).apply { id = 20L }
         val evidence = Evidence("old.jpg", "old.jpg", "image/jpeg", 500, ByteArray(5), progress).apply { id = 5L }
-        val dto = EvidenceDto(5L, "unnamed.jpg", "unnamed.jpg", "image/jpeg", 1024, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 5L,
+            fileName = "unnamed.jpg",
+            originalFileName = "unnamed.jpg",
+            contentType = "image/jpeg",
+            fileSize = 1024,
+            uploadDate = LocalDateTime.now(),
+            progressId = 20L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -384,7 +449,15 @@ class EvidenceServiceTest {
     fun should_update_evidence_using_default_name_if_original_filename_is_null() {
         val progress = Progress("Actualización", LocalDateTime.now(), mock(), mock()).apply { id = 30L }
         val evidence = Evidence("prev.jpg", "prev.jpg", "image/jpeg", 600, ByteArray(600), progress).apply { id = 6L }
-        val dto = EvidenceDto(6L, "unnamed.jpg", "unnamed.jpg", "image/jpeg", 1500, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 6L,
+            fileName = "unnamed.jpg",
+            originalFileName = "unnamed.jpg",
+            contentType = "image/jpeg",
+            fileSize = 1500,
+            uploadDate = LocalDateTime.now(),
+            progressId = 30L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -403,12 +476,19 @@ class EvidenceServiceTest {
         assertEquals("unnamed.jpg", result.image?.fileName)
     }
 
-
     @Test
     fun should_upload_evidence_using_default_name_if_original_filename_is_null() {
         val progress = Progress("Subida", LocalDateTime.now(), mock(), mock()).apply { id = 20L }
         val evidence = Evidence("unnamed.jpg", "unnamed.jpg", "image/jpeg", 1000, ByteArray(1000), progress)
-        val dto = EvidenceDto(20L, "unnamed.jpg", "unnamed.jpg", "image/jpeg", 1000, LocalDateTime.now())
+        val dto = EvidenceDto(
+            id = 20L,
+            fileName = "unnamed.jpg",
+            originalFileName = "unnamed.jpg",
+            contentType = "image/jpeg",
+            fileSize = 1000,
+            uploadDate = LocalDateTime.now(),
+            progressId = 20L
+        )
 
         `when`(file.isEmpty).thenReturn(false)
         `when`(file.contentType).thenReturn("image/jpeg")
@@ -464,7 +544,8 @@ class EvidenceServiceTest {
             originalFileName = "unnamed.jpg",
             contentType = "application/octet-stream",
             fileSize = 123L,
-            uploadDate =  LocalDateTime.now()
+            uploadDate = LocalDateTime.now(),
+            progressId = 1L
         )
 
         `when`(evidenceMapper.toDto(savedEvidence)).thenReturn(expectedDto)
@@ -475,7 +556,6 @@ class EvidenceServiceTest {
         assertEquals("unnamed.jpg", result.image?.fileName)
         verify(evidenceRepository).save(any(Evidence::class.java))
     }
-
 
     @Test
     fun should_update_evidence_with_default_values_when_fields_are_null() {
@@ -519,7 +599,8 @@ class EvidenceServiceTest {
             originalFileName = "unnamed.jpg",
             contentType = "application/octet-stream",
             fileSize = 456L,
-            uploadDate = LocalDateTime.now()
+            uploadDate = LocalDateTime.now(),
+            progressId = 1L
         )
 
         `when`(evidenceRepository.findById(10L)).thenReturn(Optional.of(existingEvidence))

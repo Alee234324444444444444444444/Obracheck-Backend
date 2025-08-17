@@ -17,7 +17,7 @@ class EvidenceController(
     private val evidenceService: EvidenceService
 ) {
 
-    @PostMapping("/upload")
+    @PostMapping("/upload", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun uploadEvidence(
         @RequestParam("file_name") file: MultipartFile,
         @RequestParam("progress_id") progressId: Long
@@ -26,7 +26,7 @@ class EvidenceController(
         return ResponseEntity.ok(response)
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun updateEvidence(
         @PathVariable id: Long,
         @RequestParam("file_name") file: MultipartFile
